@@ -40,12 +40,12 @@ setup(
     url='https://colaboratory.research.google.com/',
     packages=find_packages(exclude=('tests*',)),
     install_requires=DEPENDENCIES,
-    namespace_packages=('google',),
     license='Apache 2.0',
     keywords='google colab ipython jupyter',
     classifiers=(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: POSIX',
