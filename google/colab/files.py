@@ -57,10 +57,15 @@ def upload_file(filename):
   )
 
 
-def upload():
+def upload(target_dir='', make_dirs=False):
   """Render a widget to upload local (to the browser) files to the kernel.
 
   Blocks until the files are available.
+
+  Args:
+    target_dir: If provided, corresponds to the directory to write the files to.
+    make_dirs: Defaults to False. If True target_dir directory will be created
+      if it does not exist.
 
   Returns:
     A map of the form {<filename>: <file contents>} for all uploaded files.
@@ -71,17 +76,21 @@ def upload():
   local_filenames = dict()
   uploaded_files_with_updated_names = dict()
 
+  if make_dirs:
+    _os.makedirs(target_dir, exist_ok=True)
+
   for filename, data in uploaded_files.items():
-    local_filename = local_filenames.get(filename)
+    complete_filename = _os.path.join(target_dir, filename)
+    local_filename = local_filenames.get(complete_filename)
     if not local_filename:
-      local_filename = _get_unique_filename(filename)
-      local_filenames[filename] = local_filename
+      local_filename = _get_unique_filename(complete_filename)
+      local_filenames[complete_filename] = local_filename
       print(
           'Saving {filename} to {local_filename}'.format(
               filename=filename, local_filename=local_filename
           )
       )
-    with open(local_filename, 'ab') as f:
+    with open(local_filename, 'wb') as f:
       f.write(data)
     uploaded_files_with_updated_names[local_filename] = data
   return uploaded_files_with_updated_names
